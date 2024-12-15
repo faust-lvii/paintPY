@@ -13,6 +13,14 @@ class PaintApp:
         self.canvas = tk.Canvas(self.root, bg="#505050", width=800, height=500)
         self.canvas.pack(pady=20)
 
+        # Bindings for resizing
+        self.canvas.bind("<Button-3>", self.start_resize)  # Sağ fare tuşu ile boyut değiştirme başlat
+        self.canvas.bind("<B3-Motion>", self.resize_canvas)  # Sağ fare tuşu ile sürükleme
+        self.canvas.bind("<ButtonRelease-3>", self.stop_resize)  # Sağ fare tuşu ile bırakma
+
+        # Resizing variables
+        self.resizing = False
+
         # Toolbar
         self.toolbar = ctk.CTkFrame(self.root)
         self.toolbar.pack()
@@ -66,6 +74,23 @@ class PaintApp:
                 messagebox.showinfo("Başarılı", "Kanvas başarıyla kaydedildi!")
             except Exception as e:
                 messagebox.showerror("Hata", f"Kanvas kaydedilemedi: {e}")
+
+    def start_resize(self, event):
+        """Boyut değiştirme işlemini başlatma fonksiyonu."""
+        self.resizing = True
+        self.start_x = event.x
+        self.start_y = event.y
+
+    def resize_canvas(self, event):
+        """Kanvas boyutunu değiştirme fonksiyonu."""
+        if self.resizing:
+            new_width = max(100, event.x)  # Minimum genişlik
+            new_height = max(100, event.y)  # Minimum yükseklik
+            self.canvas.config(width=new_width, height=new_height)
+
+    def stop_resize(self, event):
+        """Boyut değiştirme işlemini durdurma fonksiyonu."""
+        self.resizing = False
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("dark")  # Karanlık tema

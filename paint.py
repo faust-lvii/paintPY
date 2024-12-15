@@ -40,11 +40,14 @@ class PaintApp:
         # Variables
         self.color = "white"
         self.last_x, self.last_y = None, None
+        self.drawing = False  # Çizim durumunu takip etmek için bir değişken
 
         # Bindings
-        self.canvas.bind("<Button-1>", self.paint)
-        self.canvas.bind("<B1-Motion>", self.paint)
-        self.canvas.bind("<ButtonRelease-1>", self.reset)
+        self.canvas.bind("<Button-1>", self.start_drawing)  # Sol fare tuşu ile çizim başlat
+        self.canvas.bind("<B1-Motion>", self.paint)  # Fare hareketi ile çizim yap
+        self.canvas.bind("<ButtonRelease-1>", self.stop_drawing)  # Sol fare tuşu ile bırakma
+
+        self.scale_factor = 1.0  # Yakınlaştırma faktörü
 
     def choose_color(self):
         """Renk seçme fonksiyonu."""
@@ -53,12 +56,18 @@ class PaintApp:
     def paint(self, event):
         """Kanvas üzerinde çizim yapma fonksiyonu."""
         x, y = event.x, event.y
-        if self.last_x and self.last_y:
-            self.canvas.create_line((self.last_x, self.last_y, x, y), fill=self.color, width=2)
+        if self.drawing:  # Çizim yapılıyorsa
+            self.canvas.create_line(self.last_x, self.last_y, x, y, fill=self.color, width=2)  # Çizim yap
         self.last_x, self.last_y = x, y
 
-    def reset(self, event):
-        """Çizim işlemini sıfırlama fonksiyonu."""
+    def start_drawing(self, event):
+        """Çizim işlemini başlatma fonksiyonu."""
+        self.drawing = True
+        self.last_x, self.last_y = event.x, event.y
+
+    def stop_drawing(self, event):
+        """Çizim işlemini durdurma fonksiyonu."""
+        self.drawing = False
         self.last_x, self.last_y = None, None
 
     def clear_canvas(self):

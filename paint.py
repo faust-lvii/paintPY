@@ -10,7 +10,7 @@ class PaintApp:
         self.root.configure(bg="#2E2E2E")
 
         # Canvas
-        self.canvas = tk.Canvas(self.root, bg="white", width=800, height=500)
+        self.canvas = tk.Canvas(self.root, bg="#505050", width=800, height=500)
         self.canvas.pack(pady=20)
 
         # Toolbar
@@ -30,7 +30,7 @@ class PaintApp:
         self.save_button.grid(row=0, column=2, padx=5)
 
         # Variables
-        self.color = "black"
+        self.color = "white"
         self.last_x, self.last_y = None, None
 
         # Bindings
